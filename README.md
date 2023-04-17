@@ -34,8 +34,10 @@ Update an existing user.
 
 DELETE /users/:id
 Delete a user by ID.
+````
 
 Authentication Endpoints
+````makefile
 POST /register
 Create a new user account.
 ````
@@ -83,7 +85,7 @@ Returned when the requested resource cannot be found. The response body will con
 Returned when an unexpected error occurs on the server. The response body will contain a JSON object with an error message.
 
 ### Testing
-To run the unit tests, run the command npm run test. This will run all tests in the `__tests__` directory.
+To run the unit tests, run the command ` npm run test`. This will run all tests in the `__tests__` directory.
 
 ### License
 This project is licensed under the MIT License.
