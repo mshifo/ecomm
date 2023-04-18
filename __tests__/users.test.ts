@@ -3,8 +3,8 @@ import app from '../src/server';
 import db from '../src/db';
 
 describe('User Management API', () => {
-    // Test POST /users route
-    describe('POST /users', () => {
+    // Test POST /admin/users route
+    describe('POST /admin/users', () => {
         beforeEach(async () => {
             // Truncate users table before each test
             await db.query('TRUNCATE TABLE users');
@@ -13,7 +13,7 @@ describe('User Management API', () => {
         test('should create a new user', async () => {
             // Make a POST request with a new user
             const response = await request(app)
-                .post('/users')
+                .post('/admin/users')
                 .send({ name: 'John Doe', email: 'johndoe@example.com' });
 
             // Check that the response has a 201 status code
@@ -32,7 +32,7 @@ describe('User Management API', () => {
 
         test('should return a 400 error if name and email are not present', async () => {
             // Make a POST request with missing fields
-            const response = await request(app).post('/users').send({});
+            const response = await request(app).post('/admin/users').send({});
 
             // Check that the response has a 400 status code
             expect(response.status).toBe(400);
@@ -45,7 +45,7 @@ describe('User Management API', () => {
         test('should return a 400 error if email is not valid', async () => {
             // Make a POST request with an invalid email
             const response = await request(app)
-                .post('/users')
+                .post('/admin/users')
                 .send({ name: 'John Doe', email: 'invalid-email' });
 
             // Check that the response has a 400 status code
@@ -62,7 +62,7 @@ describe('User Management API', () => {
 
             // Make a POST request with a user that has the same email as the existing user
             const response = await request(app)
-                .post('/users')
+                .post('/admin/users')
                 .send({ name: 'John Doe', email: 'janedoe@example.com' });
 
             // Check that the response has a 400 status code
@@ -74,8 +74,8 @@ describe('User Management API', () => {
         });
     });
 
-    // Test PUT /users/:id route
-    describe('PUT /users/:id', () => {
+    // Test PUT /admin/users/:id route
+    describe('PUT /admin/users/:id', () => {
         beforeEach(async () => {
             //
             // Truncate users table before each test
@@ -92,7 +92,7 @@ describe('User Management API', () => {
 
             // Make a PUT request with updated user data
             const response = await request(app)
-                .put(`/users/${userId}`)
+                .put(`/admin/users/${userId}`)
                 .send({ name: 'Jane Doe', email: 'janedoe@example.com' });
 
             // Check that the response has a 200 status code
@@ -117,7 +117,7 @@ describe('User Management API', () => {
             const userId = result[0].id;
 
             // Make a PUT request with missing fields
-            const response = await request(app).put(`/users/${userId}`).send({});
+            const response = await request(app).put(`/admin/users/${userId}`).send({});
 
             // Check that the response has a 400 status code
             expect(response.status).toBe(400);
@@ -134,7 +134,7 @@ describe('User Management API', () => {
 
             // Make a PUT request with an invalid email
             const response = await request(app)
-                .put(`/users/${userId}`)
+                .put(`/admin/users/${userId}`)
                 .send({ name: 'Jane Doe', email: 'invalid-email' });
 
             // Check that the response has a 400 status code
@@ -155,7 +155,7 @@ describe('User Management API', () => {
 
             // Make
             const response = await request(app)
-                .put(`/users/${userId}`)
+                .put(`/admin/users/${userId}`)
                 .send({ name: 'Jane Doe', email: 'janedoe@example.com' });
 
             // Check that the response has a 400 status code
@@ -169,7 +169,7 @@ describe('User Management API', () => {
         test('should return a 404 error if user does not exist', async () => {
             // Make a PUT request with an invalid user ID
             const response = await request(app)
-                .put('/users/1234')
+                .put('/admin/users/1234')
                 .send({ name: 'Jane Doe', email: 'janedoe@example.com' });
 
             // Check that the response has a 404 status code
@@ -181,7 +181,7 @@ describe('User Management API', () => {
         });
     });
 
-    describe('DELETE /users/:id', () => {
+    describe('DELETE /admin/users/:id', () => {
         beforeEach(async () => {
             // Truncate users table before each test
             await db.query('TRUNCATE TABLE users');
@@ -195,7 +195,7 @@ describe('User Management API', () => {
             const userId = result[0].id;
 
             // Make a DELETE request to delete the user
-            const response = await request(app).delete(`/users/${userId}`);
+            const response = await request(app).delete(`/admin/users/${userId}`);
 
             // Check that the response has a 200 status code
             expect(response.status).toBe(200);
@@ -210,7 +210,7 @@ describe('User Management API', () => {
 
         test('should return a 404 error if user does not exist', async () => {
             // Make a DELETE request with an invalid user ID
-            const response = await request(app).delete('/users/1234');
+            const response = await request(app).delete('/admin/users/1234');
 
             // Check that the response has a 404 status code
             expect(response.status).toBe(404);

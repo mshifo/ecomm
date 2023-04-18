@@ -4,10 +4,9 @@ import jwt from "jsonwebtoken";
 import db from "../db";
 import User from "../models/User";
 import { validate, loginRequestSchema, registerRequestSchema } from "../middleware/auth.validators";
-import dotenv from 'dotenv';
+import config from "../helpers/config";
 
-dotenv.config();
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = config.token_secret;
 
 const router = express.Router();
 
