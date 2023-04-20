@@ -14,11 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const db_1 = __importDefault(require("../db"));
-const validators_1 = require("./validators");
+const user_validators_1 = require("../middleware/user.validators");
 const router = (0, express_1.Router)();
 router.get('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield db_1.default.any('SELECT * FROM users');
+        const users = yield db_1.default.any('SELECT * FROM USERS');
+        //console.table(users)
         res.json(users);
     }
     catch (error) {
@@ -26,10 +27,10 @@ router.get('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: 'Internal server error' });
     }
 }));
-router.post('/', validators_1.validateUserInput, validators_1.validateEmailUniqueness, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/', user_validators_1.validateUserInput, user_validators_1.validateEmailUniqueness, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, email } = req.body;
-        const user = yield db_1.default.one('INSERT INTO users(name, email) VALUES($1, $2) RETURNING id, name, email', [name, email]);
+        const user = yield db_1.default.one('INSERT INTO USERS(name, email) VALUES($1, $2) RETURNING id, name, email', [name, email]);
         res.status(201).json(user);
     }
     catch (error) {
@@ -40,7 +41,7 @@ router.post('/', validators_1.validateUserInput, validators_1.validateEmailUniqu
 router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const user = yield db_1.default.oneOrNone('SELECT * FROM users WHERE id = $1', id);
+        const user = yield db_1.default.oneOrNone('SELECT * FROM USERS WHERE id = $1', id);
         if (!user) {
             res.status(404).json({ message: 'User not found' });
             return;
@@ -52,11 +53,11 @@ router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(500).json({ message: 'Internal server error' });
     }
 }));
-router.put('/:id', validators_1.validateUserInput, validators_1.validateEmailUniqueness, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put('/:id', user_validators_1.validateUserInput, user_validators_1.validateEmailUniqueness, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
         const { name, email } = req.body;
-        const user = yield db_1.default.oneOrNone('UPDATE users SET name = $2, email = $3 WHERE id = $1 RETURNING id, name, email', [id, name, email]);
+        const user = yield db_1.default.oneOrNone('UPDATE USERS SET name = $2, email = $3 WHERE id = $1 RETURNING id, name, email', [id, name, email]);
         if (!user) {
             res.status(404).json({ message: 'User not found' });
             return;
@@ -71,7 +72,7 @@ router.put('/:id', validators_1.validateUserInput, validators_1.validateEmailUni
 router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const result = yield db_1.default.result('DELETE FROM users WHERE id = $1', id);
+        const result = yield db_1.default.result('DELETE FROM USERS WHERE id = $1', id);
         if (result.rowCount === 0) {
             res.status(404).json({ message: 'User not found' });
             return;

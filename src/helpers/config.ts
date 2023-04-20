@@ -8,6 +8,7 @@ if (envFound.error) {
 
 export default {
   port: process.env.PORT,
+  db_port: process.env.DB_PORT,
   db_host: process.env.DB_HOST,
   db_name: process.env.DB_NAME,
   db_test_name: process.env.DB_TEST_DATABASE,
